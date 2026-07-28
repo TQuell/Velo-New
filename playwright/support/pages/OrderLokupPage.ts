@@ -1,5 +1,3 @@
-// Padrão page Obejct
-
 import { Page, expect } from '@playwright/test'
 
 type OrderStatus = 'APROVADO' | 'REPROVADO' | 'EM_ANALISE'
