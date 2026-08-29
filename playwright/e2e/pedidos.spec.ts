@@ -88,7 +88,7 @@ test.describe('Consulta de Pedido', () => {
     
   })
 
-  test('deve exibir mensagem quando o pedido não é encontrado', async ({ page, app }) => {
+  test('deve exibir mensagem quando o pedido não é encontrado', async ({ app, page }) => {
 
     const order = generateOrderCode()
 
@@ -102,4 +102,20 @@ test.describe('Consulta de Pedido', () => {
       `)
 
   })
+
+  test('deve exibir mensagem quando o código do pedido está fora do padrão', async ({ app }) => {
+    const orderCode = 'XYZ-000-INVÁLIDO'
+    await app.orderLookup.searchOrder(orderCode)
+    await app.orderLookup.validateOrderNotFound()
+  })
+
+  test('deve manter o botão de busca desabilitado com campo ou apneas espaços', async ({ app, page }) =>{
+     const button = app.orderLookup.elements.searchButton
+     await expect(button).toBeDisabled()
+
+     await app.orderLookup.elements.orderInput.fill('    ')
+     await expect(button).toBeDisabled()     
+
+  }) 
+
 })
