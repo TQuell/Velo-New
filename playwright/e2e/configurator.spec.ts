@@ -34,4 +34,34 @@ test.describe('Configuração do Veículo', () => {
         await app.configurator.validateTotalPrice('R$ 40.000,00')
         await app.configurator.validateCarImage('/src/assets/glacier-blue-aero-wheels.png')
     })
+
+    test('CT03 - deve calcular o preço dinâmico ao adicionar e remover opcionais', async ({ app, page }) => {
+        // Arrange - Localizadores
+        const precisionPark = page.getByRole('checkbox', { name: /Precision Park/i })
+        const fluxCapacitor = page.getByRole('checkbox', { name: /Flux Capacitor/i })
+
+        // Checkpoint: Garantir visibilidade dos elementos
+        await expect(precisionPark).toBeVisible()
+        await expect(fluxCapacitor).toBeVisible()
+
+        // Arrange - Checkpoint inicial
+        await app.configurator.validateTotalPrice('R$ 40.000,00')
+        await expect(precisionPark).not.toBeChecked()
+        await expect(fluxCapacitor).not.toBeChecked()
+
+        // Act & Assert - Passo 1: Marcar Precision Park (+ R$ 5.500,00)
+        await app.configurator.toggleOptional('Precision Park')
+        await expect(precisionPark).toBeChecked()
+        await app.configurator.validateTotalPrice('R$ 45.500,00')
+
+        // Act & Assert - Passo 2: Marcar Flux Capacitor (+ R$ 5.000,00)
+        await app.configurator.toggleOptional('Flux Capacitor')
+        await expect(fluxCapacitor).toBeChecked()
+        await app.configurator.validateTotalPrice('R$ 50.500,00')
+
+        // Act & Assert - Passo 3: Desmarcar opcionais agrupados
+        await fluxCapacitor.uncheck()
+        await precisionPark.uncheck()
+        await app.configurator.validateTotalPrice('R$ 40.000,00')
+    })
 })
