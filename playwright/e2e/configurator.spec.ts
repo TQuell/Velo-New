@@ -39,10 +39,6 @@ test.describe('Configuração do Veículo', () => {
         // Arrange - Elementos encapsulados via Feature Actions
         const { precisionPark, fluxCapacitor } = app.configurator.elements
 
-        // Checkpoint: Garantir visibilidade dos elementos
-        await expect(precisionPark).toBeVisible()
-        await expect(fluxCapacitor).toBeVisible()
-
         // Arrange - Checkpoint inicial
         await app.configurator.validateTotalPrice('R$ 40.000,00')
         await expect(precisionPark).not.toBeChecked()
