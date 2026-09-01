@@ -35,10 +35,9 @@ test.describe('Configuração do Veículo', () => {
         await app.configurator.validateCarImage('/src/assets/glacier-blue-aero-wheels.png')
     })
 
-    test('CT03 - deve calcular o preço dinâmico ao adicionar e remover opcionais', async ({ app, page }) => {
-        // Arrange - Localizadores
-        const precisionPark = page.getByRole('checkbox', { name: /Precision Park/i })
-        const fluxCapacitor = page.getByRole('checkbox', { name: /Flux Capacitor/i })
+    test('CT03 - deve calcular o preço dinâmico ao adicionar e remover opcionais', async ({ app }) => {
+        // Arrange - Elementos encapsulados via Feature Actions
+        const { precisionPark, fluxCapacitor } = app.configurator.elements
 
         // Checkpoint: Garantir visibilidade dos elementos
         await expect(precisionPark).toBeVisible()

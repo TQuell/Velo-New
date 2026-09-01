@@ -1,8 +1,18 @@
 import { Page, expect } from '@playwright/test'
 
 export function createConfiguratorActions(page: Page) {
+  const priceElement = page.getByTestId('total-price')
+  const carImage = page.locator('img[alt^="Velô Sprint"]')
+  const precisionPark = page.getByRole('checkbox', { name: /Precision Park/i })
+  const fluxCapacitor = page.getByRole('checkbox', { name: /Flux Capacitor/i })
 
   return {
+    elements: {
+      priceElement,
+      carImage,
+      precisionPark,
+      fluxCapacitor,
+    },
 
     async open() {
       await page.goto('http://localhost:5173/configure')
@@ -22,13 +32,11 @@ export function createConfiguratorActions(page: Page) {
     },
 
     async validateTotalPrice(expectedPrice: string) {
-      const priceElement = page.getByTestId('total-price')
       await expect(priceElement).toBeVisible()
       await expect(priceElement).toHaveText(expectedPrice)
     },
 
     async validateCarImage(expectedSrc: string | RegExp) {
-      const carImage = page.locator('img[alt^="Velô Sprint"]')
       await expect(carImage).toBeVisible()
       await expect(carImage).toHaveAttribute('src', expectedSrc)
     },
